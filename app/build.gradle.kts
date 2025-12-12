@@ -42,5 +42,6 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
-    implementation("com.github.barteksc:android-pdf-viewer:3.2.0-beta.1")
+// Sử dụng bản fork của mhiew để hỗ trợ Android mới tốt hơn và sửa lỗi build
+    implementation("com.github.mhiew:android-pdf-viewer:3.2.0-beta.3")
 }

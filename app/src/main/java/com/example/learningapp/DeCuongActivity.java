@@ -15,11 +15,14 @@ public class DeCuongActivity extends AppCompatActivity {
 
     // Dữ liệu mẫu
     String[] danhSachBai = {
-            "Bài 1: Giới thiệu nhập môn",
-            "Bài 2: Quy trình phần mềm",
-            "Bài 3: Phân tích yêu cầu",
-            "Bài 4: Thiết kế hệ thống",
-            "Bài 5: Kiểm thử phần mềm"
+            "Bài 1: Tổng quan quản lý dự án",
+            "Bài 2: Quản lý yêu cầu",
+            "Bài 3: Lập kế hoạch dự án dựa trên agile",
+            "Bài 4: Phát triển sản phẩm",
+            "Bài 5: Lập lịch dự án",
+            "Bài 6: Thực hiện dự án",
+            "Bài 7: Kết thúc dự án",
+            "Bài 8: Mẫu báo cáo bài tập lớn"
     };
 
     // Mảng chứa ID tài nguyên PDF tương ứng
@@ -28,7 +31,10 @@ public class DeCuongActivity extends AppCompatActivity {
             R.raw.bai2, // ID của res/raw/bai2.pdf
             R.raw.bai3, // ID của res/raw/bai3.pdf
             R.raw.bai4, // ID của res/raw/bai4.pdf
-            R.raw.bai5  // ID của res/raw/bai5.pdf
+            R.raw.bai5,  // ID của res/raw/bai5.pdf
+            R.raw.bai6, // ID của res/raw/bai3.pdf
+            R.raw.bai7, // ID của res/raw/bai4.pdf
+            R.raw.bai8  // ID của res/raw/bai5.pdf
     };
 
     @Override
