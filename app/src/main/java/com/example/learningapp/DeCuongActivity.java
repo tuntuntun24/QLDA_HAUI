@@ -57,18 +57,15 @@ public class DeCuongActivity extends AppCompatActivity {
         );
         lvBaiHoc.setAdapter(adapter);
 
-        lvBaiHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Lấy ID tài nguyên PDF tương ứng
-                int pdfResourceId = pdfResources[position];
+        lvBaiHoc.setOnItemClickListener((parent, view, position, id) -> {
+            // 1. Lấy ID tài nguyên PDF tương ứng (Mình đã bỏ comment dòng này để code chạy được)
+            int pdfResourceId = pdfResources[position];
 
-                // Gửi ID tài nguyên sang ChiTietBaiActivity để mở PDF
-                Intent intent = new Intent(DeCuongActivity.this, ChiTietBaiActivity.class);
-                intent.putExtra("TEN_BAI", danhSachBai[position]);
-                intent.putExtra("PDF_RESOURCE_ID", pdfResourceId); // Gửi ID PDF
-                startActivity(intent);
-            }
+            // 2. Gửi ID tài nguyên sang ChiTietBaiActivity để mở PDF
+            Intent intent = new Intent(DeCuongActivity.this, ChiTietBaiActivity.class);
+            intent.putExtra("TEN_BAI", danhSachBai[position]);
+            intent.putExtra("PDF_RESOURCE_ID", pdfResourceId);
+            startActivity(intent);
         });
     }
 
