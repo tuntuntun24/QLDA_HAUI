@@ -3,31 +3,126 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="20dp"
+    android:background="#f5f5f5">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Thống kê kết quả"
-        android:textSize="24sp"
+        android:text="Chọn bài kiểm tra"
+        android:textSize="22sp"
         android:textStyle="bold"
+        android:textColor="#333"
         android:gravity="center"
         android:layout_marginBottom="20dp"/>
 
-    <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/chartBieuDo"
+    <Button
+        android:id="@+id/btnKttx1"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginBottom="30dp"/>
+        android:layout_height="60dp"
+        android:text="KTTX 1 (Bài 1-3)"
+        android:textSize="16sp"
+        android:backgroundTint="#2196F3"
+        android:layout_marginBottom="10dp"/>
 
     <Button
-        android:id="@+id/btnLamBai"
+        android:id="@+id/btnKttx2"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="KTTX 2 (Bài 4-6)"
+        android:textSize="16sp"
+        android:backgroundTint="#4CAF50"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:id="@+id/btnKthp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="KTHP (Toàn bộ)"
+        android:textSize="16sp"
+        android:backgroundTint="#FF9800"
+        android:layout_marginBottom="30dp"/>
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Bắt đầu làm bài kiểm tra"
+        android:text="Bảng điểm gần nhất"
         android:textSize="18sp"
-        android:backgroundTint="#4CAF50"
-        android:textColor="#FFFFFF"
-        android:padding="15dp"/>
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#FFFFFF"
+        android:padding="15dp"
+        android:elevation="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="KTTX 1:"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/tvDiemKttx1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chưa thi"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="#E91E63"/>
+        </LinearLayout>
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#eee"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="KTTX 2:"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/tvDiemKttx2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chưa thi"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="#E91E63"/>
+        </LinearLayout>
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#eee"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="KTHP:"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/tvDiemKthp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chưa thi"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="#E91E63"/>
+        </LinearLayout>
+
+    </LinearLayout>
 </LinearLayout>

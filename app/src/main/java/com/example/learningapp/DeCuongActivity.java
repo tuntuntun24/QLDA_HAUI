@@ -13,28 +13,16 @@ public class DeCuongActivity extends AppCompatActivity {
 
     ListView lvBaiHoc;
 
-    // Dữ liệu mẫu
-    String[] danhSachBai = {
-            "Bài 1: Tổng quan quản lý dự án",
-            "Bài 2: Quản lý yêu cầu",
-            "Bài 3: Lập kế hoạch dự án dựa trên agile",
-            "Bài 4: Phát triển sản phẩm",
-            "Bài 5: Lập lịch dự án",
-            "Bài 6: Thực hiện dự án",
-            "Bài 7: Kết thúc dự án",
-            "Bài 8: Mẫu báo cáo bài tập lớn"
-    };
-
-    // Mảng chứa ID tài nguyên PDF tương ứng
-    int[] pdfResources = {
-            R.raw.bai1, // ID của res/raw/bai1.pdf
-            R.raw.bai2, // ID của res/raw/bai2.pdf
-            R.raw.bai3, // ID của res/raw/bai3.pdf
-            R.raw.bai4, // ID của res/raw/bai4.pdf
-            R.raw.bai5,  // ID của res/raw/bai5.pdf
-            R.raw.bai6, // ID của res/raw/bai3.pdf
-            R.raw.bai7, // ID của res/raw/bai4.pdf
-            R.raw.bai8  // ID của res/raw/bai5.pdf
+    // Dữ liệu danh sách các Chương (Thay vì Bài như cũ)
+    String[] danhSachChuong = {
+            "Chương 1: Tổng quan quản lý dự án",
+            "Chương 2: Quản lý yêu cầu",
+            "Chương 3: Lập kế hoạch dự án",
+            "Chương 4: Phát triển sản phẩm",
+            "Chương 5: Lập lịch dự án",
+            "Chương 6: Thực hiện dự án",
+            "Chương 7: Kết thúc dự án",
+            "Chương 8: Báo cáo bài tập lớn"
     };
 
     @Override
@@ -45,35 +33,42 @@ public class DeCuongActivity extends AppCompatActivity {
         // --- CÀI ĐẶT THANH TIÊU ĐỀ & NÚT BACK ---
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Đề cương bài giảng");
+            getSupportActionBar().setTitle("Đề cương môn học");
         }
 
-        // --- CODE LOGIC LISTVIEW ---
+        // --- KHỞI TẠO LISTVIEW ---
         lvBaiHoc = findViewById(R.id.lvBaiHoc);
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
-                R.layout.item_bai_hoc, // Giao diện hộp bo tròn
-                danhSachBai
+                R.layout.item_bai_hoc, // Sử dụng lại giao diện item cũ
+                danhSachChuong
         );
         lvBaiHoc.setAdapter(adapter);
 
-        lvBaiHoc.setOnItemClickListener((parent, view, position, id) -> {
-            // 1. Lấy ID tài nguyên PDF tương ứng (Mình đã bỏ comment dòng này để code chạy được)
-            int pdfResourceId = pdfResources[position];
+        // --- SỰ KIỆN KHI BẤM VÀO 1 CHƯƠNG ---
+        lvBaiHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Mở màn hình DanhSachBaiActivity (Màn hình trung gian mới)
+                Intent intent = new Intent(DeCuongActivity.this, DanhSachBaiActivity.class);
 
-            // 2. Gửi ID tài nguyên sang ChiTietBaiActivity để mở PDF
-            Intent intent = new Intent(DeCuongActivity.this, ChiTietBaiActivity.class);
-            intent.putExtra("TEN_BAI", danhSachBai[position]);
-            intent.putExtra("PDF_RESOURCE_ID", pdfResourceId);
-            startActivity(intent);
+                // Gửi vị trí chương (0, 1, 2...) để bên kia biết load dữ liệu bài nào
+                intent.putExtra("VITRI_CHUONG", position);
+
+                // Gửi tên chương sang để làm tiêu đề
+                intent.putExtra("TEN_CHUONG", danhSachChuong[position]);
+
+                startActivity(intent);
+            }
         });
     }
 
-    // --- XỬ LÝ KHI BẤM NÚT BACK ---
+    // --- XỬ LÝ KHI BẤM NÚT BACK TRÊN THANH TIÊU ĐỀ ---
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            finish(); // Đóng màn hình này
             return true;
         }
         return super.onOptionsItemSelected(item);

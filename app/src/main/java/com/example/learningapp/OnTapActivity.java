@@ -1,53 +1,72 @@
 package com.example.learningapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.MenuItem; // <--- Quan trọng
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
-
-import java.util.ArrayList;
 
 public class OnTapActivity extends AppCompatActivity {
 
-    BarChart chartBieuDo;
-    Button btnLamBai;
+    Button btnKttx1, btnKttx2, btnKthp;
+    TextView tvDiem1, tvDiem2, tvDiem3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on_tap);
 
-        // --- CÀI ĐẶT THANH TIÊU ĐỀ & NÚT BACK ---
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("Ôn tập & Kiểm tra");
         }
 
-        chartBieuDo = findViewById(R.id.chartBieuDo);
-        btnLamBai = findViewById(R.id.btnLamBai);
+        // Ánh xạ
+        btnKttx1 = findViewById(R.id.btnKttx1);
+        btnKttx2 = findViewById(R.id.btnKttx2);
+        btnKthp = findViewById(R.id.btnKthp);
 
-        veBieuDo();
+        tvDiem1 = findViewById(R.id.tvDiemKttx1);
+        tvDiem2 = findViewById(R.id.tvDiemKttx2);
+        tvDiem3 = findViewById(R.id.tvDiemKthp);
 
-        btnLamBai.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(OnTapActivity.this, TracNghiemActivity.class);
-                startActivity(intent);
-            }
-        });
+        // Xử lý sự kiện bấm nút
+        btnKttx1.setOnClickListener(v -> moManHinhThi("KEY_KTTX1"));
+        btnKttx2.setOnClickListener(v -> moManHinhThi("KEY_KTTX2"));
+        btnKthp.setOnClickListener(v -> moManHinhThi("KEY_KTHP"));
     }
 
-    // --- XỬ LÝ NÚT BACK ---
+    // Hàm mở màn hình thi và gửi kèm "Mã đề"
+    private void moManHinhThi(String maDeThi) {
+        Intent intent = new Intent(OnTapActivity.this, TracNghiemActivity.class);
+        intent.putExtra("MA_DE_THI", maDeThi);
+        startActivity(intent);
+    }
+
+    // Hàm này tự chạy mỗi khi quay lại màn hình này -> Để cập nhật điểm mới nhất
+    @Override
+    protected void onResume() {
+        super.onResume();
+        capNhatBangDiem();
+    }
+
+    private void capNhatBangDiem() {
+        SharedPreferences prefs = getSharedPreferences("LUU_DIEM_SO", Context.MODE_PRIVATE);
+
+        // Lấy điểm, mặc định là -1 nếu chưa thi
+        int d1 = prefs.getInt("KEY_KTTX1", -1);
+        int d2 = prefs.getInt("KEY_KTTX2", -1);
+        int d3 = prefs.getInt("KEY_KTHP", -1);
+
+        tvDiem1.setText(d1 == -1 ? "Chưa thi" : d1 + " điểm");
+        tvDiem2.setText(d2 == -1 ? "Chưa thi" : d2 + " điểm");
+        tvDiem3.setText(d3 == -1 ? "Chưa thi" : d3 + " điểm");
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -55,29 +74,5 @@ public class OnTapActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void veBieuDo() {
-        ArrayList<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0, 5f));
-        entries.add(new BarEntry(1, 7f));
-        entries.add(new BarEntry(2, 9f));
-
-        BarDataSet dataSet = new BarDataSet(entries, "Điểm số qua các lần thi");
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-        dataSet.setValueTextSize(14f);
-
-        BarData barData = new BarData(dataSet);
-        chartBieuDo.setData(barData);
-        chartBieuDo.getDescription().setEnabled(false);
-        chartBieuDo.animateY(1000);
-
-        String[] labels = {"Lần 1", "Lần 2", "Lần 3"};
-        XAxis xAxis = chartBieuDo.getXAxis();
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGranularity(1f);
-
-        chartBieuDo.invalidate();
     }
 }

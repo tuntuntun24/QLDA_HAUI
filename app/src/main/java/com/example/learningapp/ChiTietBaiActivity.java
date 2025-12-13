@@ -6,7 +6,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-// Import thư viện PDF
 import com.github.barteksc.pdfviewer.PDFView;
 
 public class ChiTietBaiActivity extends AppCompatActivity {
@@ -18,38 +17,64 @@ public class ChiTietBaiActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet_bai);
 
-        // --- CÀI ĐẶT THANH TIÊU ĐỀ & NÚT BACK ---
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Nội dung bài học"); // Tiêu đề mặc định
-        }
-
         pdfView = findViewById(R.id.pdfView);
 
-        // Nhận dữ liệu từ màn hình trước
+        // --- NHẬN DỮ LIỆU TỪ INTENT ---
         Intent intent = getIntent();
-        String tenBai = intent.getStringExtra("TEN_BAI");
-        int pdfResourceId = intent.getIntExtra("PDF_RESOURCE_ID", -1);
+        String tenFilePdf = intent.getStringExtra("pdfFileName");
+        String tieuDe = intent.getStringExtra("TIEU_DE_ACTIONBAR");
 
-        // Cập nhật tiêu đề theo tên bài
-        if (getSupportActionBar() != null && tenBai != null) {
-            getSupportActionBar().setTitle(tenBai);
+        // --- CÀI ĐẶT THANH TIÊU ĐỀ (ACTION BAR) ---
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            // Nếu có tiêu đề gửi sang (ví dụ: "Đề cương bài 1") thì dùng nó
+            if (tieuDe != null && !tieuDe.isEmpty()) {
+                getSupportActionBar().setTitle(tieuDe);
+            } else {
+                // Nếu không có thì hiện mặc định
+                getSupportActionBar().setTitle("Nội dung bài học");
+            }
         }
 
-        // --- HIỂN THỊ PDF ---
-        if (pdfResourceId != -1) {
-            // Lệnh này đọc file PDF từ res/raw và hiển thị luôn
-            pdfView.fromStream(getResources().openRawResource(pdfResourceId))
-                    .enableSwipe(true) // Cho phép vuốt trang
-                    .swipeHorizontal(false) // Vuốt dọc (false) hay ngang (true)
-                    .enableDoubletap(true) // Cho phép nhấp đúp để phóng to
-                    .load();
+        // --- XỬ LÝ HIỂN THỊ PDF ---
+        if (tenFilePdf != null && !tenFilePdf.isEmpty()) {
+            hienThiPdfTuTenFile(tenFilePdf);
         } else {
-            Toast.makeText(this, "Lỗi: Không tìm thấy file bài học!", Toast.LENGTH_SHORT).show();
+            // Fallback code cũ (để phòng hờ)
+            int pdfResourceId = intent.getIntExtra("PDF_RESOURCE_ID", -1);
+            if (pdfResourceId != -1) {
+                hienThiPdfTuId(pdfResourceId);
+            }
         }
     }
 
-    // --- XỬ LÝ KHI BẤM NÚT BACK ---
+    private void hienThiPdfTuTenFile(String tenFileCuaBan) {
+        try {
+            String tenResource = tenFileCuaBan.replace(".pdf", "");
+            int resId = getResources().getIdentifier(tenResource, "raw", getPackageName());
+
+            if (resId != 0) {
+                hienThiPdfTuId(resId);
+                // Lưu ý: Mình đã XÓA đoạn code tự đổi tên tiêu đề ở đây
+                // để nó không ghi đè lên tiêu đề "Đề cương bài 1" của bạn.
+            } else {
+                Toast.makeText(this, "Không tìm thấy file: " + tenFileCuaBan, Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void hienThiPdfTuId(int idTaiNguyen) {
+        pdfView.fromStream(getResources().openRawResource(idTaiNguyen))
+                .enableSwipe(true)
+                .swipeHorizontal(false)
+                .enableDoubletap(true)
+                .defaultPage(0)
+                .load();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
