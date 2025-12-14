@@ -1,7 +1,6 @@
 package com.example.learningapp;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -19,67 +18,73 @@ import java.util.ArrayList;
 public class DanhSachBaiActivity extends AppCompatActivity {
 
     ListView lvBaiHoc;
-    // Danh sách hiển thị lên màn hình
+    // Danh sách hiển thị lên màn hình (Text)
     ArrayList<String> arrHienThi = new ArrayList<>();
     // Danh sách file PDF tương ứng
     ArrayList<String> arrFilePdf = new ArrayList<>();
 
+    int viTriChuong = 0; // Biến lưu vị trí chương
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_danh_sach_bai);
+        // Sử dụng layout de_cuong (chỉ chứa 1 listview)
+        setContentView(R.layout.activity_de_cuong);
 
-        // --- NHẬN DỮ LIỆU TỪ MÀN HÌNH CHƯƠNG ---
+        // --- 1. NHẬN DỮ LIỆU TỪ MÀN HÌNH CHƯƠNG ---
         Intent intent = getIntent();
-        int viTriChuong = intent.getIntExtra("VITRI_CHUONG", 0);
+        // Lưu ý: Gán vào biến toàn cục (không khai báo int viTriChuong mới ở đây)
+        viTriChuong = intent.getIntExtra("VITRI_CHUONG", 0);
         String tenChuong = intent.getStringExtra("TEN_CHUONG");
 
-        // --- CẤU HÌNH THANH TIÊU ĐỀ ---
+        // --- 2. CẤU HÌNH THANH TIÊU ĐỀ ---
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(tenChuong);
+            if (tenChuong != null) {
+                getSupportActionBar().setTitle(tenChuong);
+            }
         }
 
         lvBaiHoc = findViewById(R.id.lvBaiHoc);
 
-        // --- TẠO DỮ LIỆU ---
+        // --- 3. TẠO DỮ LIỆU ---
         taoDuLieuBaiHoc(viTriChuong);
 
-        // --- GÁN ADAPTER ---
+        // --- 4. GÁN ADAPTER ---
         MyAdapter adapter = new MyAdapter(this, R.layout.item_bai_hoc, arrHienThi);
         lvBaiHoc.setAdapter(adapter);
 
-        // --- XỬ LÝ SỰ KIỆN CLICK ---
+        // --- 5. XỬ LÝ SỰ KIỆN CLICK ---
         lvBaiHoc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                // Logic: Vị trí chẵn (0, 2...) là Đề cương, Lẻ (1, 3...) là Trắc nghiệm
                 if (position % 2 == 0) {
-                    // === CLICK VÀO ĐỀ CƯƠNG ===
+                    // === CLICK VÀO ĐỀ CƯƠNG (PDF) ===
                     int pdfIndex = position / 2;
 
                     if (pdfIndex < arrFilePdf.size()) {
                         Intent i = new Intent(DanhSachBaiActivity.this, ChiTietBaiActivity.class);
 
-                        // 1. Gửi tên file PDF (như cũ)
-                        i.putExtra("pdfFileName", arrFilePdf.get(pdfIndex));
+                        // Gửi tên file PDF (Key phải khớp với ChiTietBaiActivity)
+                        i.putExtra("FILE_PDF", arrFilePdf.get(pdfIndex));
 
-                        // 2. Gửi thêm TIÊU ĐỀ (Lấy đúng dòng chữ đang hiện trên danh sách)
-                        // Ví dụ: "Đề cương bài 1"
+                        // Gửi tiêu đề hiển thị
                         String tieuDeCanHien = arrHienThi.get(position);
-                        i.putExtra("TIEU_DE_ACTIONBAR", tieuDeCanHien);
+                        i.putExtra("TEN_BAI_HOC", tieuDeCanHien);
 
                         startActivity(i);
                     }
                 } else {
-                    // === CLICK VÀO TRẮC NGHIỆM (SỬA ĐOẠN NÀY) ===
+                    // === CLICK VÀO TRẮC NGHIỆM ===
                     Intent i = new Intent(DanhSachBaiActivity.this, TracNghiemActivity.class);
 
-                    // Tính số bài dựa trên vị trí chương (viTriChuong nhận từ Intent ở onCreate)
-                    // Ví dụ: Chương 1 (index 0) -> Bài 1
+                    // Tính số bài: Chương 0 -> Bài 1
                     int soBai = viTriChuong + 1;
 
-                    // Gửi mã đề đặc biệt: "LESSON_1", "LESSON_2"...
+                    // Gửi mã đề thi đặc biệt. Ví dụ: "LESSON_1"
+                    // Bên file TracNghiemActivity cần xử lý mã này để load câu hỏi tương ứng
                     i.putExtra("MA_DE_THI", "LESSON_" + soBai);
 
                     startActivity(i);
@@ -88,34 +93,27 @@ public class DanhSachBaiActivity extends AppCompatActivity {
         });
     }
 
-    // --- HÀM TẠO DỮ LIỆU ĐƯỢC SỬA LẠI ---
+    // --- HÀM TẠO DỮ LIỆU ---
     private void taoDuLieuBaiHoc(int viTriChuong) {
         arrHienThi.clear();
         arrFilePdf.clear();
 
-        // Quy tắc:
-        // Chương 1 (viTri 0) -> Bài 1
-        // Chương 2 (viTri 1) -> Bài 2
-        // ...
-        // Chương 8 (viTri 7) -> Bài 8
+        // Quy tắc: Chương 1 (index 0) -> Bài 1
+        int soBai = viTriChuong + 1;
 
-        int soBai = viTriChuong + 1; // Tính số bài
-
-        // Tạo tên file PDF tự động: bai1.pdf, bai2.pdf, ..., bai8.pdf
+        // Tạo tên file PDF: bai1.pdf, bai2.pdf... (Đảm bảo file này có trong thư mục assets)
         String tenFilePdf = "bai" + soBai + ".pdf";
 
-        // Thêm vào danh sách
-        themBai(String.valueOf(soBai), tenFilePdf);
-    }
+        // Thêm vào danh sách (Sử dụng Resource String để đa ngôn ngữ)
 
-    // Hàm thêm bài: Tạo 2 dòng "Đề cương" và "Trắc nghiệm"
-    private void themBai(String soBai, String filePdf) {
-        // Dòng 1
-        arrHienThi.add("Đề cương bài " + soBai);
-        arrFilePdf.add(filePdf);
+        // Dòng 1: Đề cương (Sử dụng chuỗi từ strings.xml + số bài)
+        String textDeCuong = getString(R.string.txt_de_cuong_bai) + " " + soBai;
+        arrHienThi.add(textDeCuong);
+        arrFilePdf.add(tenFilePdf);
 
-        // Dòng 2
-        arrHienThi.add("Trắc nghiệm bài " + soBai);
+        // Dòng 2: Trắc nghiệm
+        String textTracNghiem = getString(R.string.txt_trac_nghiem_bai) + " " + soBai;
+        arrHienThi.add(textTracNghiem);
     }
 
     @Override
@@ -127,6 +125,7 @@ public class DanhSachBaiActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // --- ADAPTER TÙY CHỈNH (GIỮ NGUYÊN) ---
     class MyAdapter extends ArrayAdapter<String> {
         AppCompatActivity context;
         int resource;
@@ -144,16 +143,17 @@ public class DanhSachBaiActivity extends AppCompatActivity {
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater inflater = context.getLayoutInflater();
             View v = inflater.inflate(resource, null);
-            TextView tvTen = (TextView) v;
+            TextView tvTen = v.findViewById(R.id.tvTenBai); // Đảm bảo ID này đúng trong item_bai_hoc.xml
+
+            // Nếu item_bai_hoc.xml chỉ là TextView thì dùng dòng dưới:
+            if (tvTen == null && v instanceof TextView) {
+                tvTen = (TextView) v;
+            }
 
             String text = data.get(position);
-            tvTen.setText(text);
-
-//            if (text.startsWith("Trắc nghiệm")) {
-//                tvTen.setTextColor(Color.parseColor("#E64A19")); // Màu cam đỏ
-//            } else {
-//                tvTen.setTextColor(Color.parseColor("#1565C0")); // Màu xanh
-//            }
+            if (tvTen != null) {
+                tvTen.setText(text);
+            }
 
             return v;
         }

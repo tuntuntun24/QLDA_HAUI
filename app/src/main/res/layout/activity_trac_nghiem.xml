@@ -3,23 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp"
-    android:background="#F5F5F5">
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:background="#FFFFFF"
         android:padding="10dp"
-        android:elevation="2dp"
         android:layout_marginBottom="10dp">
 
         <TextView
-            android:text="Thời gian còn lại: "
+            android:text="@string/label_thoi_gian"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginEnd="5dp"/>
 
         <TextView
             android:id="@+id/tvDongHo"
@@ -35,15 +34,13 @@
         android:id="@+id/lvCauHoi"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:divider="@null"
-        android:dividerHeight="10dp"/>
+        android:layout_weight="1"/>
 
     <Button
         android:id="@+id/btnNopBai"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="NỘP BÀI"
+        android:text="@string/btn_nop_bai"
         android:textSize="18sp"
         android:textStyle="bold"
         android:backgroundTint="#2196F3"

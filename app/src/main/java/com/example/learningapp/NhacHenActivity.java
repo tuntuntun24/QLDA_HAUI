@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -17,7 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -25,21 +23,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-// Import thư viện JSON có sẵn của Android để lưu dữ liệu phức tạp
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Locale;
 
 public class NhacHenActivity extends AppCompatActivity {
 
     ListView lvNhacHen;
     Button btnThemHen;
-
-    ArrayList<HenGio> arrHenGio = new ArrayList<>();
-    MyAdapter adapter;
+    ArrayList<String> arrHenGio = new ArrayList<>();
+    HenGioAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,24 +44,19 @@ public class NhacHenActivity extends AppCompatActivity {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Nhắc hẹn học tập");
+            getSupportActionBar().setTitle(R.string.title_nhac_hen);
         }
 
         lvNhacHen = findViewById(R.id.lvNhacHen);
         btnThemHen = findViewById(R.id.btnThemHen);
 
-        // 1. ĐỌC DỮ LIỆU CŨ TỪ BỘ NHỚ LÊN
         docDuLieu();
 
-        // Nếu lần đầu chưa có gì thì tạo mẫu cho đẹp (Optional)
-        if(arrHenGio.isEmpty()) {
-            arrHenGio.add(new HenGio("08:00", "Ví dụ: Lên lớp đúng giờ", true));
-        }
-
-        adapter = new MyAdapter(this, R.layout.item_nhac_hen, arrHenGio);
+        // Sử dụng Adapter tùy chỉnh
+        adapter = new HenGioAdapter(this, R.layout.item_nhac_hen, arrHenGio);
         lvNhacHen.setAdapter(adapter);
 
-        // --- SỰ KIỆN 1: THÊM MỚI ---
+        // Sự kiện Thêm
         btnThemHen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +64,7 @@ public class NhacHenActivity extends AppCompatActivity {
             }
         });
 
-        // --- SỰ KIỆN 2: SỬA ---
+        // Sự kiện Sửa
         lvNhacHen.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -81,7 +72,7 @@ public class NhacHenActivity extends AppCompatActivity {
             }
         });
 
-        // --- SỰ KIỆN 3: XÓA ---
+        // Sự kiện Xóa
         lvNhacHen.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -91,146 +82,155 @@ public class NhacHenActivity extends AppCompatActivity {
         });
     }
 
-    // --- HÀM LƯU DỮ LIỆU VÀO BỘ NHỚ ---
-    private void luuDuLieu() {
-        SharedPreferences sharedPreferences = getSharedPreferences("DATA_NHAC_HEN", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        // Dùng JSONArray để chuyển danh sách Object thành chuỗi JSON
-        JSONArray jsonArray = new JSONArray();
-        try {
-            for (HenGio item : arrHenGio) {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("gio", item.gio);
-                jsonObject.put("noiDung", item.noiDung);
-                jsonObject.put("dangBat", item.dangBat);
-                jsonArray.put(jsonObject);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        // Lưu chuỗi JSON vào SharedPreferences
-        editor.putString("LIST_JSON", jsonArray.toString());
-        editor.apply(); // Lưu ngay lập tức
-    }
-
-    // --- HÀM ĐỌC DỮ LIỆU TỪ BỘ NHỚ ---
-    private void docDuLieu() {
-        SharedPreferences sharedPreferences = getSharedPreferences("DATA_NHAC_HEN", Context.MODE_PRIVATE);
-        String jsonString = sharedPreferences.getString("LIST_JSON", "");
-
-        if (!jsonString.isEmpty()) {
-            try {
-                arrHenGio.clear(); // Xóa sạch list tạm để nạp dữ liệu từ bộ nhớ
-                JSONArray jsonArray = new JSONArray(jsonString);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject obj = jsonArray.getJSONObject(i);
-                    String gio = obj.getString("gio");
-                    String noiDung = obj.getString("noiDung");
-                    boolean dangBat = obj.getBoolean("dangBat");
-
-                    arrHenGio.add(new HenGio(gio, noiDung, dangBat));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    // --- HÀM HIỂN THỊ HỘP THOẠI (GIỮ NGUYÊN CODE TRƯỚC, CHỈ THÊM LỆNH SAVE) ---
-    private void hienThiDialogNhapThongTin(int viTriCanSua) {
+    // --- HÀM HIỂN THỊ DIALOG CÓ CHỌN GIỜ ---
+    private void hienThiDialogNhapThongTin(final int viTriCanSua) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(viTriCanSua == -1 ? "Thêm nhắc nhở mới" : "Chỉnh sửa nhắc nhở");
 
+        if (viTriCanSua == -1) builder.setTitle(getString(R.string.dialog_them_tieu_de));
+        else builder.setTitle(getString(R.string.dialog_sua_tieu_de));
+
+        // 1. Tạo Layout chứa các view (EditText + Button chọn giờ)
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setPadding(50, 40, 50, 10);
+        layout.setPadding(30, 20, 30, 20);
 
-        final TextView tvChonGio = new TextView(this);
-        tvChonGio.setTextSize(24);
-        tvChonGio.setTextColor(Color.BLUE);
-        tvChonGio.setPadding(0, 0, 0, 30);
-        layout.addView(tvChonGio);
-
+        // 2. Ô nhập nội dung
         final EditText edtNoiDung = new EditText(this);
-        edtNoiDung.setHint("Nhập nội dung công việc...");
+        edtNoiDung.setHint(getString(R.string.hint_nhap_noi_dung));
         layout.addView(edtNoiDung);
 
-        builder.setView(layout);
+        // 3. TextView hiển thị giờ đã chọn
+        final TextView tvGioDaChon = new TextView(this);
+        tvGioDaChon.setTextSize(16);
+        tvGioDaChon.setPadding(0, 20, 0, 0);
 
-        final String[] gioTamThoi = {"08:00"};
+        // Mặc định lấy giờ hiện tại
+        final Calendar calendar = Calendar.getInstance();
+        final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        tvGioDaChon.setText(getString(R.string.label_gio_hen) + timeFormat.format(calendar.getTime())); // "Giờ hẹn: 08:30"
 
-        if (viTriCanSua != -1) {
-            HenGio itemCu = arrHenGio.get(viTriCanSua);
-            gioTamThoi[0] = itemCu.gio;
-            edtNoiDung.setText(itemCu.noiDung);
-        } else {
-            Calendar c = Calendar.getInstance();
-            gioTamThoi[0] = String.format("%02d:%02d", c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE));
-        }
-        tvChonGio.setText("Giờ hẹn: " + gioTamThoi[0]);
+        layout.addView(tvGioDaChon);
 
-        tvChonGio.setOnClickListener(new View.OnClickListener() {
+        // 4. Nút Chọn giờ
+        Button btnChonGio = new Button(this);
+        btnChonGio.setText(getString(R.string.btn_chon_gio));
+        btnChonGio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String[] parts = gioTamThoi[0].split(":");
-                int h = Integer.parseInt(parts[0]);
-                int m = Integer.parseInt(parts[1]);
-
+                // Hiện TimePickerDialog
                 TimePickerDialog timePickerDialog = new TimePickerDialog(NhacHenActivity.this,
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                gioTamThoi[0] = String.format("%02d:%02d", hourOfDay, minute);
-                                tvChonGio.setText("Giờ hẹn: " + gioTamThoi[0]);
+                                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                calendar.set(Calendar.MINUTE, minute);
+                                tvGioDaChon.setText(getString(R.string.label_gio_hen) + timeFormat.format(calendar.getTime()));
                             }
-                        }, h, m, true);
+                        },
+                        calendar.get(Calendar.HOUR_OF_DAY),
+                        calendar.get(Calendar.MINUTE),
+                        true); // true = chế độ 24h
                 timePickerDialog.show();
             }
         });
+        layout.addView(btnChonGio);
 
-        builder.setPositiveButton("Lưu", new DialogInterface.OnClickListener() {
+        // --- XỬ LÝ DỮ LIỆU CŨ NẾU ĐANG SỬA ---
+        if (viTriCanSua != -1) {
+            String duLieuCu = arrHenGio.get(viTriCanSua);
+            // Định dạng lưu: "[HH:mm] Nội dung"
+            // Tách giờ và nội dung ra
+            try {
+                int indexKetThucGio = duLieuCu.indexOf("] ");
+                if (indexKetThucGio != -1) {
+                    String gioCu = duLieuCu.substring(1, indexKetThucGio); // Lấy "HH:mm"
+                    String noiDungCu = duLieuCu.substring(indexKetThucGio + 2); // Lấy phần nội dung
+
+                    edtNoiDung.setText(noiDungCu);
+                    tvGioDaChon.setText(getString(R.string.label_gio_hen) + gioCu);
+
+                    // Cập nhật lại calendar để nếu người dùng không chọn lại giờ thì vẫn giữ giờ cũ
+                    calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(gioCu.split(":")[0]));
+                    calendar.set(Calendar.MINUTE, Integer.parseInt(gioCu.split(":")[1]));
+                } else {
+                    edtNoiDung.setText(duLieuCu);
+                }
+            } catch (Exception e) {
+                edtNoiDung.setText(duLieuCu);
+            }
+        }
+
+        builder.setView(layout);
+
+        // Nút Lưu
+        builder.setPositiveButton(getString(R.string.btn_luu), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String noiDungMoi = edtNoiDung.getText().toString();
-                if (noiDungMoi.isEmpty()) noiDungMoi = "Không có nội dung";
+                String noiDung = edtNoiDung.getText().toString().trim();
+                String gio = timeFormat.format(calendar.getTime());
 
-                if (viTriCanSua == -1) {
-                    arrHenGio.add(new HenGio(gioTamThoi[0], noiDungMoi, true));
-                    Toast.makeText(NhacHenActivity.this, "Đã thêm mới!", Toast.LENGTH_SHORT).show();
-                } else {
-                    arrHenGio.get(viTriCanSua).gio = gioTamThoi[0];
-                    arrHenGio.get(viTriCanSua).noiDung = noiDungMoi;
-                    Toast.makeText(NhacHenActivity.this, "Đã cập nhật!", Toast.LENGTH_SHORT).show();
+                if (!noiDung.isEmpty()) {
+                    // Ghép chuỗi: "[HH:mm] Nội dung"
+                    String ketQua = "[" + gio + "] " + noiDung;
+
+                    if (viTriCanSua == -1) {
+                        arrHenGio.add(ketQua);
+                        Toast.makeText(NhacHenActivity.this, getString(R.string.msg_da_them), Toast.LENGTH_SHORT).show();
+                    } else {
+                        arrHenGio.set(viTriCanSua, ketQua);
+                        Toast.makeText(NhacHenActivity.this, getString(R.string.msg_da_cap_nhat), Toast.LENGTH_SHORT).show();
+                    }
+
+                    // Sắp xếp danh sách theo giờ tăng dần
+                    Collections.sort(arrHenGio);
+
+                    luuDuLieu();
+                    adapter.notifyDataSetChanged();
                 }
-
-                luuDuLieu(); // <--- QUAN TRỌNG: LƯU LẠI SAU KHI SỬA
-                adapter.notifyDataSetChanged();
             }
         });
 
-        builder.setNegativeButton("Hủy", null);
+        builder.setNegativeButton(getString(R.string.btn_huy), null);
         builder.show();
     }
 
-    private void xacNhanXoa(int position) {
+    private void xacNhanXoa(final int position) {
         new AlertDialog.Builder(this)
-                .setTitle("Xác nhận xóa")
-                .setMessage("Xóa nhắc nhở: " + arrHenGio.get(position).noiDung + "?")
-                .setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
+                .setTitle(getString(R.string.btn_xoa))
+                .setMessage(getString(R.string.msg_xac_nhan_xoa))
+                .setPositiveButton(getString(R.string.btn_xoa), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         arrHenGio.remove(position);
-
-                        luuDuLieu(); // <--- QUAN TRỌNG: LƯU LẠI SAU KHI XÓA
-
+                        luuDuLieu();
                         adapter.notifyDataSetChanged();
-                        Toast.makeText(NhacHenActivity.this, "Đã xóa!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(NhacHenActivity.this, getString(R.string.msg_da_xoa), Toast.LENGTH_SHORT).show();
                     }
                 })
-                .setNegativeButton("Hủy", null)
+                .setNegativeButton(getString(R.string.btn_huy), null)
                 .show();
+    }
+
+    private void luuDuLieu() {
+        SharedPreferences prefs = getSharedPreferences("NHAC_HEN_DATA_V3", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        StringBuilder sb = new StringBuilder();
+        for (String s : arrHenGio) sb.append(s).append("\n");
+        editor.putString("KEY_LIST_STRING", sb.toString());
+        editor.apply();
+    }
+
+    private void docDuLieu() {
+        arrHenGio.clear();
+        SharedPreferences prefs = getSharedPreferences("NHAC_HEN_DATA_V3", Context.MODE_PRIVATE);
+        String data = prefs.getString("KEY_LIST_STRING", "");
+        if (!data.isEmpty()) {
+            String[] items = data.split("\n");
+            for (String item : items) {
+                if (!item.trim().isEmpty()) arrHenGio.add(item);
+            }
+        }
+        Collections.sort(arrHenGio); // Sắp xếp lại khi load
     }
 
     @Override
@@ -242,26 +242,12 @@ public class NhacHenActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // Model
-    public class HenGio {
-        public String gio;
-        public String noiDung;
-        public boolean dangBat;
-
-        public HenGio(String gio, String noiDung, boolean dangBat) {
-            this.gio = gio;
-            this.noiDung = noiDung;
-            this.dangBat = dangBat;
-        }
-    }
-
-    // Adapter
-    class MyAdapter extends ArrayAdapter<HenGio> {
-        AppCompatActivity context;
+    class HenGioAdapter extends ArrayAdapter<String> {
+        Context context;
         int resource;
-        ArrayList<HenGio> data;
+        ArrayList<String> data;
 
-        public MyAdapter(AppCompatActivity context, int resource, ArrayList<HenGio> data) {
+        public HenGioAdapter(Context context, int resource, ArrayList<String> data) {
             super(context, resource, data);
             this.context = context;
             this.resource = resource;
@@ -271,31 +257,16 @@ public class NhacHenActivity extends AppCompatActivity {
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            LayoutInflater inflater = context.getLayoutInflater();
-            View v = inflater.inflate(resource, null);
-
-            TextView tvGio = v.findViewById(R.id.tvGioHen);
-            TextView tvNoiDung = v.findViewById(R.id.tvNoiDungNhac);
-            Switch sw = v.findViewById(R.id.swBatTat);
-
-            HenGio henGio = data.get(position);
-
-            if(tvGio != null) tvGio.setText(henGio.gio);
-            if(tvNoiDung != null) tvNoiDung.setText(henGio.noiDung);
-            if(sw != null) {
-                sw.setChecked(henGio.dangBat);
-
-                // Xử lý sự kiện bật/tắt Switch và LƯU LẠI
-                sw.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        henGio.dangBat = sw.isChecked();
-                        luuDuLieu(); // <--- QUAN TRỌNG: Lưu trạng thái bật/tắt
-                    }
-                });
+            if (convertView == null) {
+                convertView = LayoutInflater.from(context).inflate(resource, parent, false);
             }
+            TextView tv = convertView.findViewById(R.id.tvNoiDungHen);
 
-            return v;
+            // Dữ liệu dạng: "[08:30] Đi học"
+            String itemText = data.get(position);
+            tv.setText(itemText);
+
+            return convertView;
         }
     }
 }

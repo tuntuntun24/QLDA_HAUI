@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.github.barteksc.pdfviewer.PDFView;
+import com.github.barteksc.pdfviewer.PDFView; // Thư viện PDF
+import java.io.InputStream;
 
 public class ChiTietBaiActivity extends AppCompatActivity {
 
@@ -19,60 +19,53 @@ public class ChiTietBaiActivity extends AppCompatActivity {
 
         pdfView = findViewById(R.id.pdfView);
 
-        // --- NHẬN DỮ LIỆU TỪ INTENT ---
+        // 1. Nhận dữ liệu
         Intent intent = getIntent();
-        String tenFilePdf = intent.getStringExtra("pdfFileName");
-        String tieuDe = intent.getStringExtra("TIEU_DE_ACTIONBAR");
+        String tenBaiHoc = intent.getStringExtra("TEN_BAI_HOC");
+        String filePdfName = intent.getStringExtra("FILE_PDF"); // Ví dụ: "bai1.pdf"
 
-        // --- CÀI ĐẶT THANH TIÊU ĐỀ (ACTION BAR) ---
+        // 2. Cài đặt Action Bar
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-            // Nếu có tiêu đề gửi sang (ví dụ: "Đề cương bài 1") thì dùng nó
-            if (tieuDe != null && !tieuDe.isEmpty()) {
-                getSupportActionBar().setTitle(tieuDe);
+            if (tenBaiHoc != null && !tenBaiHoc.isEmpty()) {
+                getSupportActionBar().setTitle(tenBaiHoc);
             } else {
-                // Nếu không có thì hiện mặc định
-                getSupportActionBar().setTitle("Nội dung bài học");
+                getSupportActionBar().setTitle(R.string.title_chi_tiet_bai);
             }
         }
 
-        // --- XỬ LÝ HIỂN THỊ PDF ---
-        if (tenFilePdf != null && !tenFilePdf.isEmpty()) {
-            hienThiPdfTuTenFile(tenFilePdf);
-        } else {
-            // Fallback code cũ (để phòng hờ)
-            int pdfResourceId = intent.getIntExtra("PDF_RESOURCE_ID", -1);
-            if (pdfResourceId != -1) {
-                hienThiPdfTuId(pdfResourceId);
-            }
-        }
+        // 3. Load File PDF từ res/raw
+        loadPdfFromRaw(filePdfName);
     }
 
-    private void hienThiPdfTuTenFile(String tenFileCuaBan) {
+    private void loadPdfFromRaw(String pdfFileName) {
         try {
-            String tenResource = tenFileCuaBan.replace(".pdf", "");
-            int resId = getResources().getIdentifier(tenResource, "raw", getPackageName());
+            // Bước 1: Cắt đuôi ".pdf" đi để lấy tên tài nguyên (VD: "bai1.pdf" -> "bai1")
+            String resourceName = pdfFileName.replace(".pdf", "");
 
+            // Bước 2: Tìm ID của file trong thư mục raw dựa vào tên
+            int resId = getResources().getIdentifier(resourceName, "raw", getPackageName());
+
+            // Nếu tìm thấy file (ID khác 0)
             if (resId != 0) {
-                hienThiPdfTuId(resId);
-                // Lưu ý: Mình đã XÓA đoạn code tự đổi tên tiêu đề ở đây
-                // để nó không ghi đè lên tiêu đề "Đề cương bài 1" của bạn.
+                // Bước 3: Mở dòng dữ liệu (Stream) từ raw
+                InputStream inputStream = getResources().openRawResource(resId);
+
+                // Bước 4: Load PDF từ Stream
+                pdfView.fromStream(inputStream)
+                        .enableSwipe(true)
+                        .swipeHorizontal(false)
+                        .enableDoubletap(true)
+                        .defaultPage(0)
+                        .load();
             } else {
-                Toast.makeText(this, "Không tìm thấy file: " + tenFileCuaBan, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Lỗi: Không tìm thấy file " + pdfFileName + " trong res/raw", Toast.LENGTH_LONG).show();
             }
+
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(this, "Lỗi đọc file PDF", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void hienThiPdfTuId(int idTaiNguyen) {
-        pdfView.fromStream(getResources().openRawResource(idTaiNguyen))
-                .enableSwipe(true)
-                .swipeHorizontal(false)
-                .enableDoubletap(true)
-                .defaultPage(0)
-                .load();
     }
 
     @Override

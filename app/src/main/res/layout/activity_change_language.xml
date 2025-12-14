@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:gravity="center_horizontal"
+    android:background="#FFFFFF">
+
+    <RadioGroup
+        android:id="@+id/rgLanguage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <RadioButton
+            android:id="@+id/rbVi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/rad_tieng_viet"
+            android:textSize="18sp"
+            android:padding="10dp"
+            android:layout_marginBottom="10dp"/>
+
+        <RadioButton
+            android:id="@+id/rbEn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/rad_tieng_anh"
+            android:textSize="18sp"
+            android:padding="10dp"/>
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnSaveLang"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@string/btn_luu_ngon_ngu"
+        android:textSize="18sp"
+        android:background="@drawable/bg_button_vien_tron"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="30dp"
+        android:textAllCaps="false"/>
+
+</LinearLayout>

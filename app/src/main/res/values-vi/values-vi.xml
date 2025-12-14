@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Quản lý dự án</string>
+    <string name="txt_tieu_de_app">Quản lý dự án</string>
+
+    <string name="btn_de_cuong">Đề cương bài giảng</string>
+    <string name="btn_nhac_hen">Quản lý nhắc hẹn</string>
+    <string name="btn_on_tap">Ôn tập kiểm tra</string>
+
+    <string name="nav_trang_chu">Trang chủ</string>
+    <string name="nav_cai_dat">Cài đặt</string>
+
+    <string name="tieu_de_cai_dat">Cài đặt</string>
+    <string name="btn_sang_toi">Thay đổi nền sáng tối</string>
+    <string name="btn_ngon_ngu">Thay đổi ngôn ngữ</string>
+
+    <string name="tieu_de_doi_ngon_ngu">Chọn ngôn ngữ</string>
+    <string name="rad_tieng_viet">Tiếng Việt</string>
+    <string name="rad_tieng_anh">Tiếng Anh</string>
+    <string name="btn_luu_ngon_ngu">Lưu cài đặt</string>
+
+    <string name="title_de_cuong">Đề cương bài giảng</string>
+    <string name="title_nhac_hen">Nhắc hẹn học tập</string>
+    <string name="title_on_tap">Ôn tập &amp; Kiểm tra</string>
+    <string name="title_cai_dat">Cài đặt</string>
+    <string name="title_trang_chu">Quản lý dự án</string>
+
+    <string name="btn_them_hen">Thêm nhắc nhở</string>
+
+    <string-array name="arr_de_cuong">
+        <item>Chương 1: Tổng quan quản lý dự án</item>
+        <item>Chương 2: Quản lý yêu cầu</item>
+        <item>Chương 3: Lập kế hoạch dự án</item>
+        <item>Chương 4: Phát triển sản phẩm</item>
+        <item>Chương 5: Lập lịch dự án</item>
+        <item>Chương 6: Thực hiện dự án</item>
+        <item>Chương 7: Kết thúc dự án</item>
+        <item>Chương 8: Báo cáo bài tập lớn</item>
+    </string-array>
+
+    <string-array name="arr_on_tap">
+        <item>Bài kiểm tra thường xuyên 1 (KTTX1)</item>
+        <item>Bài kiểm tra thường xuyên 2 (KTTX2)</item>
+        <item>Bài kiểm tra học phần (KTHP)</item>
+    </string-array>
+
+    <string name="dialog_them_tieu_de">Thêm nhắc nhở mới</string>
+    <string name="dialog_sua_tieu_de">Chỉnh sửa nhắc nhở</string>
+    <string name="hint_nhap_noi_dung">Nhập nội dung công việc...</string>
+    <string name="btn_luu">Lưu</string>
+    <string name="btn_huy">Hủy</string>
+    <string name="btn_xoa">Xóa</string>
+    <string name="msg_xac_nhan_xoa">Bạn có chắc muốn xóa không?</string>
+    <string name="msg_da_them">Đã thêm mới!</string>
+    <string name="msg_da_cap_nhat">Đã cập nhật!</string>
+    <string name="msg_da_xoa">Đã xóa!</string>
+    <string name="label_gio_hen">Giờ hẹn: </string>
+
+    <string name="txt_lich_su_diem">Lịch sử điểm số</string>
+    <string name="btn_bat_dau_lam">Bắt đầu làm bài</string>
+
+    <string name="label_thoi_gian">Thời gian:</string>
+    <string name="btn_nop_bai">NỘP BÀI</string>
+    <string name="msg_nop_bai_tieu_de">Nộp bài</string>
+    <string name="msg_nop_bai_hoi">Bạn có chắc chắn muốn nộp bài không?</string>
+    <string name="btn_nop_ngay">Nộp ngay</string>
+    <string name="btn_lam_tiep">Làm tiếp</string>
+    <string name="msg_het_gio">Hết giờ làm bài!</string>
+    <string name="msg_ket_qua_tieu_de">Hoàn thành bài thi</string>
+    <string name="btn_thoat">Thoát</string>
+    <string name="txt_ket_qua_cau_dung">Số câu đúng: </string>
+    <string name="txt_ket_qua_diem">Điểm số: </string>
+
+    <string name="txt_danh_sach_bai">Danh sách bài thi</string>
+    <string name="txt_ket_qua_gan_nhat">Kết quả làm bài gần nhất</string>
+    <string name="label_kttx1">KTTX 1 (Bài 1-3):</string>
+    <string name="label_kttx2">KTTX 2 (Bài 4-6):</string>
+    <string name="label_kthp">KTHP (Tổng hợp):</string>
+
+    <string name="title_chi_tiet">Chi tiết bài thi</string>
+
+    <string name="title_lam_bai">Làm bài thi</string>
+
+    <string name="title_chi_tiet_bai">Nội dung bài học</string>
+
+    <string-array name="arr_bai_chuong_1">
+        <item>1.1. Khái niệm dự án và quản lý dự án</item>
+        <item>1.2. Các đặc trưng của dự án</item>
+        <item>1.3. Chu trình quản lý dự án</item>
+    </string-array>
+
+    <string-array name="arr_bai_chuong_2">
+        <item>2.1. Quy trình quản lý yêu cầu</item>
+        <item>2.2. Kỹ thuật khơi gợi yêu cầu</item>
+        <item>2.3. Phân tích và đàm phán yêu cầu</item>
+    </string-array>
+
+    <string-array name="arr_bai_mac_dinh">
+        <item>Bài 1: Nội dung đang cập nhật...</item>
+        <item>Bài 2: Nội dung đang cập nhật...</item>
+    </string-array>
+
+    <string name="txt_de_cuong_bai">Đề cương bài</string>
+    <string name="txt_trac_nghiem_bai">Trắc nghiệm bài</string>
+
+    <string name="label_lan_thi">Lần</string>
+    <string name="label_bieu_do_chart">Điểm số qua các lần thi</string>
+
+    <string name="txt_chua_thi">Chưa thi</string>
+
+    <string name="btn_chon_gio">Chọn giờ</string>
+
+    <string name="label_tong_ket">Điểm tổng kết (10):</string>
+    <string name="label_diem_chu">Điểm chữ:</string>
+    <string name="txt_chua_du_diem">Chưa đủ điểm</string>
+</resources>

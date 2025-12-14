@@ -4,37 +4,43 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast; // Thêm thư viện thông báo
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Khai báo hết các nút
+    // Khai báo các nút bấm (Tất cả đều là Button)
     Button btnDeCuong, btnNhacHen, btnOnTap;
-    Button btnDong, btnTrangChu, btnCaiDat; // Các nút mới thêm
+    Button btnDong;
+    Button btnTrangChu, btnCaiDat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        LanguageManager langManager = new LanguageManager(this);
+        langManager.updateResource(langManager.getLang());
         setContentView(R.layout.activity_main);
 
-        // Ẩn thanh tiêu đề mặc định đi cho giống thiết kế trong ảnh
+        // Ẩn thanh tiêu đề mặc định (Action Bar) cho đẹp
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
 
-        // --- ÁNH XẠ CÁC NÚT ---
+        // --- 1. ÁNH XẠ (TÌM ID TỪ FILE XML) ---
+        // Lưu ý: Các ID này phải khớp chính xác với android:id trong file activity_main.xml
         btnDeCuong = findViewById(R.id.btnDeCuong);
         btnNhacHen = findViewById(R.id.btnNhacHen);
         btnOnTap = findViewById(R.id.btnOnTap);
-
-        // Các nút mới
         btnDong = findViewById(R.id.btnDong);
+
+        // ID mới sửa lại (btnTrangChu thay vì btnNavTrangChu)
         btnTrangChu = findViewById(R.id.btnTrangChu);
         btnCaiDat = findViewById(R.id.btnCaiDat);
 
-        // --- XỬ LÝ SỰ KIỆN CHUYỂN MÀN HÌNH ---
+        // --- 2. XỬ LÝ CÁC CHỨC NĂNG CHÍNH ---
 
+        // Chức năng 1: Vào Đề Cương
         btnDeCuong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Chức năng 2: Vào Nhắc Hẹn
         btnNhacHen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Chức năng 3: Vào Ôn Tập & Kiểm Tra
         btnOnTap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,18 +67,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // --- XỬ LÝ CÁC NÚT PHỤ ---
+        // --- 3. XỬ LÝ CÁC NÚT ĐIỀU HƯỚNG & ĐÓNG ---
 
-        // Nút Đóng: Thoát ứng dụng
+        // Nút Đóng (X): Thoát hẳn ứng dụng
         btnDong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finishAffinity(); // Đóng hoàn toàn ứng dụng
-                System.exit(0);
+                finishAffinity(); // Đóng tất cả các màn hình
+                System.exit(0);   // Thoát tiến trình
             }
         });
 
-        // Nút Trang chủ & Cài đặt: Hiện thông báo (vì chưa có màn hình chức năng này)
+        // Nút Trang Chủ: Hiện thông báo vì đang ở trang chủ rồi
         btnTrangChu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,11 +86,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Nút Cài Đặt: Chuyển sang màn hình Cài Đặt
         btnCaiDat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Chức năng Cài đặt đang phát triển", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, CaiDatActivity.class);
+                startActivity(intent);
             }
         });
+
     }
+
 }

@@ -38,7 +38,7 @@ public class TracNghiemActivity extends AppCompatActivity {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Làm bài thi");
+            getSupportActionBar().setTitle(R.string.title_lam_bai); // Đổi tiêu đề
         }
 
         // 1. Nhận dữ liệu
@@ -96,15 +96,15 @@ public class TracNghiemActivity extends AppCompatActivity {
 
     private void hienThiXacNhanNopBai() {
         new AlertDialog.Builder(this)
-                .setTitle("Nộp bài")
-                .setMessage("Bạn có chắc chắn muốn nộp bài không?")
-                .setPositiveButton("Nộp ngay", new DialogInterface.OnClickListener() {
+                .setTitle(getString(R.string.msg_nop_bai_tieu_de))
+                .setMessage(getString(R.string.msg_nop_bai_hoi))
+                .setPositiveButton(getString(R.string.btn_nop_ngay), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         chamDiemVaKetThuc();
                     }
                 })
-                .setNegativeButton("Làm tiếp", null)
+                .setNegativeButton(getString(R.string.btn_lam_tiep), null)
                 .show();
     }
 
@@ -129,14 +129,14 @@ public class TracNghiemActivity extends AppCompatActivity {
         luuDiem(diemThang10);
 
         // Hiển thị kết quả
-        String msg = "Kết quả: " + soCauDung + "/" + tongSoCau + " câu đúng.\nĐiểm số: " + diemThang10;
+        String msg = getString(R.string.txt_ket_qua_cau_dung) + soCauDung + "/" + tongSoCau + "\n" +
+                getString(R.string.txt_ket_qua_diem) + diemThang10;
 
-        // Hiện Dialog kết quả, bấm OK thì thoát
         new AlertDialog.Builder(this)
-                .setTitle("Hoàn thành bài thi")
+                .setTitle(getString(R.string.msg_ket_qua_tieu_de))
                 .setMessage(msg)
-                .setCancelable(false) // Không cho bấm ra ngoài
-                .setPositiveButton("Thoát", new DialogInterface.OnClickListener() {
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.btn_thoat), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
@@ -174,7 +174,7 @@ public class TracNghiemActivity extends AppCompatActivity {
             public void onFinish() {
                 timeLeftInMillis = 0;
                 updateCountDownText();
-                Toast.makeText(TracNghiemActivity.this, "Hết giờ!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TracNghiemActivity.this, getString(R.string.msg_het_gio), Toast.LENGTH_SHORT).show();
                 chamDiemVaKetThuc(); // Tự động nộp bài khi hết giờ
             }
         }.start();

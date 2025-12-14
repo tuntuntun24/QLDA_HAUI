@@ -1,3 +1,115 @@
 <resources>
-    <string name="app_name">LearningApp</string>
+    <string name="app_name">Project Management</string>
+    <string name="txt_tieu_de_app">Project Management</string>
+
+    <string name="btn_de_cuong">Syllabus</string>
+    <string name="btn_nhac_hen">Reminders</string>
+    <string name="btn_on_tap">Review &amp; Test</string>
+
+    <string name="nav_trang_chu">Home</string>
+    <string name="nav_cai_dat">Settings</string>
+
+    <string name="tieu_de_cai_dat">Settings</string>
+    <string name="btn_sang_toi">Dark/Light Mode</string>
+    <string name="btn_ngon_ngu">Change Language</string>
+
+    <string name="tieu_de_doi_ngon_ngu">Select Language</string>
+    <string name="rad_tieng_viet">Vietnamese</string>
+    <string name="rad_tieng_anh">English</string>
+    <string name="btn_luu_ngon_ngu">Save &amp; Apply</string>
+
+    <string name="title_de_cuong">Course Syllabus</string>
+    <string name="title_nhac_hen">Study Reminders</string>
+    <string name="title_on_tap">Review &amp; Test</string>
+    <string name="title_cai_dat">Settings</string>
+    <string name="title_trang_chu">Project Management</string>
+
+    <string name="btn_them_hen">Add Reminder</string>
+
+    <string-array name="arr_de_cuong">
+        <item>Chapter 1: Project Management Overview</item>
+        <item>Chapter 2: Requirements Management</item>
+        <item>Chapter 3: Project Planning</item>
+        <item>Chapter 4: Product Development</item>
+        <item>Chapter 5: Project Scheduling</item>
+        <item>Chapter 6: Project Execution</item>
+        <item>Chapter 7: Project Closure</item>
+        <item>Chapter 8: Final Report</item>
+    </string-array>
+
+    <string-array name="arr_on_tap">
+        <item>Regular Test 1 (KTTX1)</item>
+        <item>Regular Test 2 (KTTX2)</item>
+        <item>Final Exam (KTHP)</item>
+    </string-array>
+
+    <string name="dialog_them_tieu_de">Add New Reminder</string>
+    <string name="dialog_sua_tieu_de">Edit Reminder</string>
+    <string name="hint_nhap_noi_dung">Enter task details...</string>
+    <string name="btn_luu">Save</string>
+    <string name="btn_huy">Cancel</string>
+    <string name="btn_xoa">Delete</string>
+    <string name="msg_xac_nhan_xoa">Are you sure you want to delete?</string>
+    <string name="msg_da_them">Added successfully!</string>
+    <string name="msg_da_cap_nhat">Updated successfully!</string>
+    <string name="msg_da_xoa">Deleted!</string>
+    <string name="label_gio_hen">Time: </string>
+
+    <string name="txt_lich_su_diem">Score History</string>
+    <string name="btn_bat_dau_lam">Start Exam</string>
+
+    <string name="label_thoi_gian">Time:</string>
+    <string name="btn_nop_bai">SUBMIT</string>
+    <string name="msg_nop_bai_tieu_de">Submit Exam</string>
+    <string name="msg_nop_bai_hoi">Are you sure you want to submit?</string>
+    <string name="btn_nop_ngay">Submit Now</string>
+    <string name="btn_lam_tiep">Continue</string>
+    <string name="msg_het_gio">Times up!</string>
+    <string name="msg_ket_qua_tieu_de">Exam Finished</string>
+    <string name="btn_thoat">Exit</string>
+    <string name="txt_ket_qua_cau_dung">Correct answers: </string>
+    <string name="txt_ket_qua_diem">Score: </string>
+
+    <string name="txt_danh_sach_bai">Exam List</string>
+    <string name="txt_ket_qua_gan_nhat">Recent Results</string>
+    <string name="label_kttx1">Test 1 (Lessons 1-3):</string>
+    <string name="label_kttx2">Test 2 (Lessons 4-6):</string>
+    <string name="label_kthp">Final Exam (All):</string>
+
+    <string name="title_chi_tiet">Exam Details</string>
+
+    <string name="title_lam_bai">Taking Exam</string>
+
+    <string name="title_chi_tiet_bai">Lesson Content</string>
+
+    <string-array name="arr_bai_chuong_1">
+        <item>1.1. Project &amp; PM Concepts</item>
+        <item>1.2. Project Characteristics</item>
+        <item>1.3. Project Management Cycle</item>
+    </string-array>
+
+    <string-array name="arr_bai_chuong_2">
+        <item>2.1. Requirements Management Process</item>
+        <item>2.2. Requirements Elicitation Techniques</item>
+        <item>2.3. Requirements Analysis &amp; Negotiation</item>
+    </string-array>
+
+    <string-array name="arr_bai_mac_dinh">
+        <item>Lesson 1: Updating...</item>
+        <item>Lesson 2: Updating...</item>
+    </string-array>
+
+    <string name="txt_de_cuong_bai">Syllabus Lesson</string>
+    <string name="txt_trac_nghiem_bai">Quiz Lesson</string>
+
+    <string name="label_lan_thi">Attempt</string>
+    <string name="label_bieu_do_chart">Score History</string>
+
+    <string name="txt_chua_thi">No attempt</string>
+
+    <string name="btn_chon_gio">Select Time</string>
+
+    <string name="label_tong_ket">Final Score (10):</string>
+    <string name="label_diem_chu">Letter Grade:</string>
+    <string name="txt_chua_du_diem">N/A</string>
 </resources>

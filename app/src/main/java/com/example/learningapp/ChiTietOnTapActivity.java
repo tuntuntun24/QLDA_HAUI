@@ -34,9 +34,10 @@ public class ChiTietOnTapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet_on_tap);
 
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Chi tiết bài thi");
+            getSupportActionBar().setTitle(R.string.title_chi_tiet); // Đổi tiêu đề Action Bar
         }
 
         // Nhận mã đề từ màn hình trước
@@ -70,9 +71,7 @@ public class ChiTietOnTapActivity extends AppCompatActivity {
     }
 
     private void veBieuDoLichSu() {
-        // 1. Lấy dữ liệu lịch sử (Chuỗi dạng "8,9,10")
         SharedPreferences prefs = getSharedPreferences("LUU_DIEM_SO", Context.MODE_PRIVATE);
-        // Lưu ý: Key lưu lịch sử mình sẽ thêm chữ "HISTORY_" vào trước mã đề
         String historyString = prefs.getString("HISTORY_" + maDeThi, "");
 
         ArrayList<BarEntry> entries = new ArrayList<>();
@@ -83,17 +82,22 @@ public class ChiTietOnTapActivity extends AppCompatActivity {
             for (int i = 0; i < diemSo.length; i++) {
                 try {
                     float diem = Float.parseFloat(diemSo[i]);
-                    // Trục X là i (Lần 1, 2...), Trục Y là điểm
                     entries.add(new BarEntry(i, diem));
-                    labels.add("Lần " + (i + 1));
+
+                    // --- SỬA CHỖ NÀY: Thay "Lần " cứng bằng getString(...) ---
+                    // Cũ: labels.add("Lần " + (i + 1));
+                    labels.add(getString(R.string.label_lan_thi) + " " + (i + 1));
+
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
             }
         }
 
-        // 2. Cấu hình biểu đồ
-        BarDataSet dataSet = new BarDataSet(entries, "Điểm số qua các lần thi");
+        // --- SỬA CHỖ NÀY: Thay tiêu đề cứng bằng getString(...) ---
+        // Cũ: BarDataSet dataSet = new BarDataSet(entries, "Điểm số qua các lần thi");
+        BarDataSet dataSet = new BarDataSet(entries, getString(R.string.label_bieu_do_chart));
+
         dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         dataSet.setValueTextSize(14f);
         dataSet.setValueTextColor(Color.BLACK);
@@ -103,14 +107,13 @@ public class ChiTietOnTapActivity extends AppCompatActivity {
         chartLichSu.getDescription().setEnabled(false);
         chartLichSu.animateY(1000);
 
-        // Cấu hình trục ngang (X Axis) hiện chữ "Lần 1, Lần 2..."
         XAxis xAxis = chartLichSu.getXAxis();
         xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setGranularity(1f);
         xAxis.setLabelCount(labels.size());
 
-        chartLichSu.invalidate(); // Vẽ lại
+        chartLichSu.invalidate();
     }
 
     @Override
