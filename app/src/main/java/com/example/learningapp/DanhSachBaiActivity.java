@@ -72,8 +72,16 @@ public class DanhSachBaiActivity extends AppCompatActivity {
                         startActivity(i);
                     }
                 } else {
-                    // === CLICK VÀO TRẮC NGHIỆM ===
+                    // === CLICK VÀO TRẮC NGHIỆM (SỬA ĐOẠN NÀY) ===
                     Intent i = new Intent(DanhSachBaiActivity.this, TracNghiemActivity.class);
+
+                    // Tính số bài dựa trên vị trí chương (viTriChuong nhận từ Intent ở onCreate)
+                    // Ví dụ: Chương 1 (index 0) -> Bài 1
+                    int soBai = viTriChuong + 1;
+
+                    // Gửi mã đề đặc biệt: "LESSON_1", "LESSON_2"...
+                    i.putExtra("MA_DE_THI", "LESSON_" + soBai);
+
                     startActivity(i);
                 }
             }

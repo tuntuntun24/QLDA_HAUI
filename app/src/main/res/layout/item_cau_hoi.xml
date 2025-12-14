@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="15dp"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/bg_button_vien_tron">
+    <TextView
+        android:id="@+id/tvNoiDungCauHoi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Câu 1: Nội dung câu hỏi..."
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:layout_marginBottom="10dp"/>
+
+    <RadioGroup
+        android:id="@+id/rgDapAn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/rbA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="A. Đáp án 1"
+            android:padding="5dp"/>
+
+        <RadioButton
+            android:id="@+id/rbB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="B. Đáp án 2"
+            android:padding="5dp"/>
+
+        <RadioButton
+            android:id="@+id/rbC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="C. Đáp án 3"
+            android:padding="5dp"/>
+
+        <RadioButton
+            android:id="@+id/rbD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="D. Đáp án 4"
+            android:padding="5dp"/>
+    </RadioGroup>
+</LinearLayout>

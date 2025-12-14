@@ -13,6 +13,9 @@
         android:theme="@style/Theme.LearningApp"
         tools:targetApi="31">
         <activity
+            android:name=".ChiTietOnTapActivity"
+            android:exported="false" />
+        <activity
             android:name=".DanhSachDeActivity"
             android:exported="false" />
         <activity

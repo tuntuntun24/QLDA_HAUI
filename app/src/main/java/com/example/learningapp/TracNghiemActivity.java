@@ -1,26 +1,35 @@
 package com.example.learningapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 
 public class TracNghiemActivity extends AppCompatActivity {
 
-    RadioGroup radioGroup;
-    RadioButton radB; // Giả sử đáp án B là đúng
-    Button btnNopBai;
-    TextView tvKetQua;
+    private ListView lvCauHoi;
+    private TextView tvDongHo;
+    private Button btnNopBai;
 
-    String maDeThi = ""; // Lưu mã đề (KTTX1, KTTX2...) được gửi sang
+    private List<Question> questionList;
+    private CauHoiAdapter adapter;
+    private String maDeThi;
+    private QuizDatabaseHelper dbHelper;
+    private CountDownTimer countDownTimer;
+    private long timeLeftInMillis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,60 +41,157 @@ public class TracNghiemActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Làm bài thi");
         }
 
-        // Nhận mã đề thi từ màn hình OnTap gửi sang
+        // 1. Nhận dữ liệu
         Intent intent = getIntent();
         maDeThi = intent.getStringExtra("MA_DE_THI");
+        if (maDeThi == null) maDeThi = "KEY_KTTX1";
 
-        radioGroup = findViewById(R.id.radioGroup);
-        radB = findViewById(R.id.radB);
+        setupTime(); // Cài đặt thời gian
+
+        // 2. Ánh xạ
+        lvCauHoi = findViewById(R.id.lvCauHoi);
+        tvDongHo = findViewById(R.id.tvDongHo);
         btnNopBai = findViewById(R.id.btnNopBai);
-        tvKetQua = findViewById(R.id.tvKetQua);
 
+        // 3. Lấy dữ liệu câu hỏi
+        dbHelper = new QuizDatabaseHelper(this);
+        questionList = dbHelper.getQuestionsForExam(maDeThi);
+
+        // Trộn câu hỏi (nếu không phải ôn tập theo bài học)
+        if (!maDeThi.startsWith("LESSON_")) {
+            Collections.shuffle(questionList);
+        }
+
+        if (questionList.isEmpty()) {
+            Toast.makeText(this, "Không có câu hỏi!", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        // 4. Đưa dữ liệu vào Adapter
+        adapter = new CauHoiAdapter(this, questionList);
+        lvCauHoi.setAdapter(adapter);
+
+        // 5. Bắt đầu đếm giờ
+        startCountDown();
+
+        // 6. Xử lý nút NỘP BÀI
         btnNopBai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (radioGroup.getCheckedRadioButtonId() == -1) {
-                    Toast.makeText(TracNghiemActivity.this, "Vui lòng chọn đáp án!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                int diemSo = 0;
-                if (radB.isChecked()) {
-                    diemSo = 10; // Giả sử đúng được 10 điểm
-                    tvKetQua.setText("Chính xác! Bạn được 10 điểm");
-                    tvKetQua.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
-                } else {
-                    diemSo = 0;
-                    tvKetQua.setText("Sai rồi! Bạn được 0 điểm");
-                    tvKetQua.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
-                }
-
-                // --- LƯU ĐIỂM VÀO BỘ NHỚ ---
-                luuDiem(diemSo);
-
-                // Khóa nút nộp bài lại
-                btnNopBai.setEnabled(false);
+                hienThiXacNhanNopBai();
             }
         });
     }
 
-    private void luuDiem(int diem) {
-        if(maDeThi != null && !maDeThi.isEmpty()) {
+    private void setupTime() {
+        if (maDeThi.equals("KEY_KTTX1")) {
+            timeLeftInMillis = 15 * 60 * 1000;
+        } else if (maDeThi.equals("KEY_KTTX2") || maDeThi.equals("KEY_KTHP")) {
+            timeLeftInMillis = 20 * 60 * 1000;
+        } else {
+            timeLeftInMillis = 5 * 60 * 1000; // 5 phút cho bài ôn tập nhỏ
+        }
+    }
+
+    private void hienThiXacNhanNopBai() {
+        new AlertDialog.Builder(this)
+                .setTitle("Nộp bài")
+                .setMessage("Bạn có chắc chắn muốn nộp bài không?")
+                .setPositiveButton("Nộp ngay", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        chamDiemVaKetThuc();
+                    }
+                })
+                .setNegativeButton("Làm tiếp", null)
+                .show();
+    }
+
+    private void chamDiemVaKetThuc() {
+        if (countDownTimer != null) countDownTimer.cancel();
+
+        int soCauDung = 0;
+        // Duyệt qua danh sách để kiểm tra đáp án người dùng (userAnswer)
+        for (Question q : questionList) {
+            if (q.getUserAnswer() == q.getAnswerNr()) {
+                soCauDung++;
+            }
+        }
+
+        int tongSoCau = questionList.size();
+
+        // Tính điểm thang 10
+        float diemThang10 = ((float) soCauDung / tongSoCau) * 10;
+        diemThang10 = (float) (Math.round(diemThang10 * 10.0) / 10.0);
+
+        // Lưu điểm
+        luuDiem(diemThang10);
+
+        // Hiển thị kết quả
+        String msg = "Kết quả: " + soCauDung + "/" + tongSoCau + " câu đúng.\nĐiểm số: " + diemThang10;
+
+        // Hiện Dialog kết quả, bấm OK thì thoát
+        new AlertDialog.Builder(this)
+                .setTitle("Hoàn thành bài thi")
+                .setMessage(msg)
+                .setCancelable(false) // Không cho bấm ra ngoài
+                .setPositiveButton("Thoát", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .show();
+    }
+
+    private void luuDiem(float diem) {
+        if (maDeThi != null && !maDeThi.startsWith("LESSON_")) {
+            // Chỉ lưu điểm cho các bài kiểm tra lớn, bài ôn tập nhỏ (LESSON_) có thể không cần lưu hoặc lưu riêng
             SharedPreferences prefs = getSharedPreferences("LUU_DIEM_SO", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
 
-            // Lưu điểm với cái tên là Mã đề thi (KEY_KTTX1, KEY_KTTX2...)
-            editor.putInt(maDeThi, diem);
-            editor.apply();
+            editor.putFloat(maDeThi, diem);
 
-            Toast.makeText(this, "Đã lưu kết quả thi!", Toast.LENGTH_SHORT).show();
+            String lichSuCu = prefs.getString("HISTORY_" + maDeThi, "");
+            String diemMoiStr = String.valueOf(diem);
+            String lichSuMoi = lichSuCu.isEmpty() ? diemMoiStr : lichSuCu + "," + diemMoiStr;
+            editor.putString("HISTORY_" + maDeThi, lichSuMoi);
+
+            editor.apply();
         }
+    }
+
+    private void startCountDown() {
+        countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeftInMillis = millisUntilFinished;
+                updateCountDownText();
+            }
+
+            @Override
+            public void onFinish() {
+                timeLeftInMillis = 0;
+                updateCountDownText();
+                Toast.makeText(TracNghiemActivity.this, "Hết giờ!", Toast.LENGTH_SHORT).show();
+                chamDiemVaKetThuc(); // Tự động nộp bài khi hết giờ
+            }
+        }.start();
+    }
+
+    private void updateCountDownText() {
+        int minutes = (int) (timeLeftInMillis / 1000) / 60;
+        int seconds = (int) (timeLeftInMillis / 1000) % 60;
+        String timeFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
+        tvDongHo.setText(timeFormatted);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            // Hỏi xác nhận trước khi thoát nếu chưa nộp bài
+            hienThiXacNhanNopBai();
             return true;
         }
         return super.onOptionsItemSelected(item);
