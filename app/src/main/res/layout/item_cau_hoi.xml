@@ -3,18 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="15dp"
-    android:layout_marginBottom="10dp"
-    android:background="@drawable/bg_button_vien_tron">
+    android:padding="16dp"
+    android:background="@drawable/bg_button_vien_tron"
+    android:layout_marginBottom="12dp">
+
     <TextView
         android:id="@+id/tvNoiDungCauHoi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Câu 1: Nội dung câu hỏi..."
+        android:text="Nội dung câu hỏi sẽ hiện ở đây..."
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="#000"
-        android:layout_marginBottom="10dp"/>
+        android:textColor="#000000"
+        android:layout_marginBottom="12dp"/>
 
     <RadioGroup
         android:id="@+id/rgDapAn"
@@ -25,28 +26,33 @@
             android:id="@+id/rbA"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="A. Đáp án 1"
-            android:padding="5dp"/>
+            android:text="A. Đáp án A"
+            android:textSize="15sp"
+            android:padding="8dp"/>
 
         <RadioButton
             android:id="@+id/rbB"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="B. Đáp án 2"
-            android:padding="5dp"/>
+            android:text="B. Đáp án B"
+            android:textSize="15sp"
+            android:padding="8dp"/>
 
         <RadioButton
             android:id="@+id/rbC"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="C. Đáp án 3"
-            android:padding="5dp"/>
+            android:text="C. Đáp án C"
+            android:textSize="15sp"
+            android:padding="8dp"/>
 
         <RadioButton
             android:id="@+id/rbD"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="D. Đáp án 4"
-            android:padding="5dp"/>
+            android:text="D. Đáp án D"
+            android:textSize="15sp"
+            android:padding="8dp"/>
     </RadioGroup>
+
 </LinearLayout>

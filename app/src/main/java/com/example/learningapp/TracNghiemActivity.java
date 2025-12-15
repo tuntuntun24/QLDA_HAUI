@@ -112,9 +112,9 @@ public class TracNghiemActivity extends AppCompatActivity {
         if (countDownTimer != null) countDownTimer.cancel();
 
         int soCauDung = 0;
-        // Duyệt qua danh sách để kiểm tra đáp án người dùng (userAnswer)
         for (Question q : questionList) {
-            if (q.getUserAnswer() == q.getAnswerNr()) {
+            // So sánh chuỗi đáp án (A, B, C, D)
+            if (q.getUserAnswer() != null && q.getUserAnswer().equals(q.getCorrectAnswer())) {
                 soCauDung++;
             }
         }

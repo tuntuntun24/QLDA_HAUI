@@ -13,36 +13,30 @@ import java.util.List;
 public class CauHoiAdapter extends BaseAdapter {
 
     private Context context;
-    private List<Question> listCauHoi;
+    private List<Question> questionList;
 
-    public CauHoiAdapter(Context context, List<Question> listCauHoi) {
+    public CauHoiAdapter(Context context, List<Question> questionList) {
         this.context = context;
-        this.listCauHoi = listCauHoi;
+        this.questionList = questionList;
     }
 
     @Override
-    public int getCount() {
-        return listCauHoi.size();
-    }
+    public int getCount() { return questionList.size(); }
 
     @Override
-    public Object getItem(int position) {
-        return listCauHoi.get(position);
-    }
+    public Object getItem(int position) { return questionList.get(position); }
 
     @Override
-    public long getItemId(int position) {
-        return position;
-    }
+    public long getItemId(int position) { return position; }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        MyViewHolder holder;
+        ViewHolder holder;
 
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_cau_hoi, parent, false);
-            holder = new MyViewHolder();
-            holder.tvNoiDung = convertView.findViewById(R.id.tvNoiDungCauHoi);
+            holder = new ViewHolder();
+            holder.tvCauHoi = convertView.findViewById(R.id.tvNoiDungCauHoi);
             holder.rgDapAn = convertView.findViewById(R.id.rgDapAn);
             holder.rbA = convertView.findViewById(R.id.rbA);
             holder.rbB = convertView.findViewById(R.id.rbB);
@@ -50,48 +44,46 @@ public class CauHoiAdapter extends BaseAdapter {
             holder.rbD = convertView.findViewById(R.id.rbD);
             convertView.setTag(holder);
         } else {
-            holder = (MyViewHolder) convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
 
-        Question q = listCauHoi.get(position);
+        Question question = questionList.get(position);
 
-        // Hiển thị nội dung
-        holder.tvNoiDung.setText("Câu " + (position + 1) + ": " + q.getQuestion());
-        holder.rbA.setText(q.getOption1());
-        holder.rbB.setText(q.getOption2());
-        holder.rbC.setText(q.getOption3());
-        holder.rbD.setText(q.getOption4());
+        // 1. Hiển thị nội dung (Đã tách từ Question.java)
+        holder.tvCauHoi.setText("Câu " + (position + 1) + ": " + question.getQuestionText());
 
-        // --- QUAN TRỌNG: XỬ LÝ CHECKED CHANGE ĐỂ LƯU ĐÁP ÁN ---
+        holder.rbA.setText("A. " + question.getOptionA());
+        holder.rbB.setText("B. " + question.getOptionB());
+        holder.rbC.setText("C. " + question.getOptionC());
+        holder.rbD.setText("D. " + question.getOptionD());
 
-        // 1. Gỡ bỏ listener cũ để tránh vòng lặp vô tận khi setChecked
+        // 2. Xóa listener cũ để tránh vòng lặp khi set trạng thái
         holder.rgDapAn.setOnCheckedChangeListener(null);
 
-        // 2. Set trạng thái check dựa vào dữ liệu đã lưu trong Model (Question)
-        switch (q.getUserAnswer()) {
-            case 1: holder.rbA.setChecked(true); break;
-            case 2: holder.rbB.setChecked(true); break;
-            case 3: holder.rbC.setChecked(true); break;
-            case 4: holder.rbD.setChecked(true); break;
-            default: holder.rgDapAn.clearCheck(); break;
-        }
+        // 3. Khôi phục trạng thái đã chọn (nếu người dùng cuộn danh sách)
+        holder.rgDapAn.clearCheck();
+        String userAns = question.getUserAnswer();
+        if ("A".equals(userAns)) holder.rbA.setChecked(true);
+        else if ("B".equals(userAns)) holder.rbB.setChecked(true);
+        else if ("C".equals(userAns)) holder.rbC.setChecked(true);
+        else if ("D".equals(userAns)) holder.rbD.setChecked(true);
 
-        // 3. Gán lại listener để lắng nghe khi người dùng bấm chọn
+        // 4. Lắng nghe sự kiện chọn đáp án mới
         holder.rgDapAn.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == R.id.rbA) q.setUserAnswer(1);
-                else if (checkedId == R.id.rbB) q.setUserAnswer(2);
-                else if (checkedId == R.id.rbC) q.setUserAnswer(3);
-                else if (checkedId == R.id.rbD) q.setUserAnswer(4);
+                if (checkedId == R.id.rbA) question.setUserAnswer("A");
+                else if (checkedId == R.id.rbB) question.setUserAnswer("B");
+                else if (checkedId == R.id.rbC) question.setUserAnswer("C");
+                else if (checkedId == R.id.rbD) question.setUserAnswer("D");
             }
         });
 
         return convertView;
     }
 
-    static class MyViewHolder {
-        TextView tvNoiDung;
+    static class ViewHolder {
+        TextView tvCauHoi;
         RadioGroup rgDapAn;
         RadioButton rbA, rbB, rbC, rbD;
     }

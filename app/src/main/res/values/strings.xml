@@ -27,14 +27,16 @@
     <string name="btn_them_hen">Add Reminder</string>
 
     <string-array name="arr_de_cuong">
-        <item>Chapter 1: Project Management Overview</item>
-        <item>Chapter 2: Requirements Management</item>
-        <item>Chapter 3: Project Planning</item>
-        <item>Chapter 4: Product Development</item>
-        <item>Chapter 5: Project Scheduling</item>
-        <item>Chapter 6: Project Execution</item>
-        <item>Chapter 7: Project Closure</item>
-        <item>Chapter 8: Final Report</item>
+        <item>Chapter 1: Project &amp; PM Overview</item>
+        <item>Chapter 2: Org. Structure &amp; HR Models</item>
+        <item>Chapter 3: Planning &amp; Scope Management</item>
+        <item>Chapter 4: Time &amp; Schedule Management</item>
+        <item>Chapter 5: Cost &amp; Resource Management</item>
+        <item>Chapter 6: Quality Management</item>
+        <item>Chapter 7: HR &amp; Communication Management</item>
+        <item>Chapter 8: Risk Management</item>
+        <item>Chapter 9: Procurement &amp; Contracts</item>
+        <item>Chapter 10: Efficiency Evaluation &amp; Closure</item>
     </string-array>
 
     <string-array name="arr_on_tap">
@@ -72,31 +74,36 @@
 
     <string name="txt_danh_sach_bai">Exam List</string>
     <string name="txt_ket_qua_gan_nhat">Recent Results</string>
-    <string name="label_kttx1">Test 1 (Lessons 1-3):</string>
-    <string name="label_kttx2">Test 2 (Lessons 4-6):</string>
-    <string name="label_kthp">Final Exam (All):</string>
+    <string name="label_kttx1">Test 1 (Chap 1-3):</string>
+    <string name="label_kttx2">Test 2 (Chap 4-7):</string>
+    <string name="label_kthp">Final Exam (All 10):</string>
 
     <string name="title_chi_tiet">Exam Details</string>
-
     <string name="title_lam_bai">Taking Exam</string>
-
     <string name="title_chi_tiet_bai">Lesson Content</string>
 
     <string-array name="arr_bai_chuong_1">
-        <item>1.1. Project &amp; PM Concepts</item>
+        <item>1.1. Project Concepts</item>
         <item>1.2. Project Characteristics</item>
-        <item>1.3. Project Management Cycle</item>
+        <item>1.3. PM vs Operations</item>
     </string-array>
 
     <string-array name="arr_bai_chuong_2">
-        <item>2.1. Requirements Management Process</item>
-        <item>2.2. Requirements Elicitation Techniques</item>
-        <item>2.3. Requirements Analysis &amp; Negotiation</item>
+        <item>2.1. Organization Models</item>
+        <item>2.2. Selecting Model</item>
     </string-array>
 
     <string-array name="arr_bai_mac_dinh">
-        <item>Lesson 1: Updating...</item>
-        <item>Lesson 2: Updating...</item>
+        <item>Lesson 1</item>
+        <item>Lesson 2</item>
+        <item>Lesson 3</item>
+        <item>Lesson 4</item>
+        <item>Lesson 5</item>
+        <item>Lesson 6</item>
+        <item>Lesson 7</item>
+        <item>Lesson 8</item>
+        <item>Lesson 9</item>
+        <item>Lesson 10</item>
     </string-array>
 
     <string name="txt_de_cuong_bai">Syllabus Lesson</string>
@@ -104,11 +111,8 @@
 
     <string name="label_lan_thi">Attempt</string>
     <string name="label_bieu_do_chart">Score History</string>
-
     <string name="txt_chua_thi">No attempt</string>
-
     <string name="btn_chon_gio">Select Time</string>
-
     <string name="label_tong_ket">Final Score (10):</string>
     <string name="label_diem_chu">Letter Grade:</string>
     <string name="txt_chua_du_diem">N/A</string>

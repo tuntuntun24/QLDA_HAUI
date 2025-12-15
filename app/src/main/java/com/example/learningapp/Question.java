@@ -2,44 +2,65 @@ package com.example.learningapp;
 
 public class Question {
     private int id;
-    private String question;
-    private String option1;
-    private String option2;
-    private String option3;
-    private String option4;
-    private int answerNr; // 1=A, 2=B, 3=C, 4=D
-    private int lessonId; // Bài số mấy (1-7)
-    private int userAnswer = 0; // 0: Chưa chọn, 1:A, 2:B, 3:C, 4:D
+    private String content; // Chuỗi gốc từ DB (chứa cả câu hỏi + đáp án)
+    private String questionText; // Chỉ nội dung câu hỏi
+    private String optionA, optionB, optionC, optionD; // 4 đáp án tách ra
+    private String correctAnswer; // Đáp án đúng từ DB ('A', 'B', 'C', 'D')
+    private String userAnswer = ""; // Đáp án người dùng chọn ('A', 'B', 'C', 'D' hoặc rỗng)
+    private int lessonId; // maDeCuong
 
-    public Question() {}
+    public Question() { }
 
-    public Question(String question, String option1, String option2, String option3, String option4, int answerNr, int lessonId) {
-        this.question = question;
-        this.option1 = option1;
-        this.option2 = option2;
-        this.option3 = option3;
-        this.option4 = option4;
-        this.answerNr = answerNr;
-        this.lessonId = lessonId;
+    // --- HÀM QUAN TRỌNG: Tách chuỗi từ DB ---
+    public void setFullContent(String rawContent) {
+        this.content = rawContent;
+        try {
+            // Giả định định dạng trong DB là:
+            // "Nội dung câu hỏi?\nA. Đáp án A\nB. Đáp án B..."
+            // Sử dụng regex để tìm vị trí các đáp án bắt đầu bằng xuống dòng và ký tự in hoa
+
+            // Tìm vị trí bắt đầu của các đáp án
+            int idxA = rawContent.lastIndexOf("\nA. ");
+            int idxB = rawContent.lastIndexOf("\nB. ");
+            int idxC = rawContent.lastIndexOf("\nC. ");
+            int idxD = rawContent.lastIndexOf("\nD. ");
+
+            if (idxA != -1 && idxB != -1 && idxC != -1 && idxD != -1) {
+                // Cắt chuỗi
+                this.questionText = rawContent.substring(0, idxA).trim();
+                this.optionA = rawContent.substring(idxA + 4, idxB).trim(); // +4 để bỏ qua "\nA. "
+                this.optionB = rawContent.substring(idxB + 4, idxC).trim();
+                this.optionC = rawContent.substring(idxC + 4, idxD).trim();
+                this.optionD = rawContent.substring(idxD + 4).trim();
+            } else {
+                // Fallback nếu dữ liệu không đúng định dạng
+                this.questionText = rawContent;
+                this.optionA = "Lựa chọn A";
+                this.optionB = "Lựa chọn B";
+                this.optionC = "Lựa chọn C";
+                this.optionD = "Lựa chọn D";
+            }
+        } catch (Exception e) {
+            this.questionText = rawContent;
+        }
     }
 
-    // Getter và Setter
+    // --- Getters & Setters ---
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
-    public String getQuestion() { return question; }
-    public void setQuestion(String question) { this.question = question; }
-    public String getOption1() { return option1; }
-    public void setOption1(String option1) { this.option1 = option1; }
-    public String getOption2() { return option2; }
-    public void setOption2(String option2) { this.option2 = option2; }
-    public String getOption3() { return option3; }
-    public void setOption3(String option3) { this.option3 = option3; }
-    public String getOption4() { return option4; }
-    public void setOption4(String option4) { this.option4 = option4; }
-    public int getAnswerNr() { return answerNr; }
-    public void setAnswerNr(int answerNr) { this.answerNr = answerNr; }
+
+    public String getQuestionText() { return questionText; }
+    public String getOptionA() { return optionA; }
+    public String getOptionB() { return optionB; }
+    public String getOptionC() { return optionC; }
+    public String getOptionD() { return optionD; }
+
+    public String getCorrectAnswer() { return correctAnswer; }
+    public void setCorrectAnswer(String correctAnswer) { this.correctAnswer = correctAnswer; }
+
+    public String getUserAnswer() { return userAnswer; }
+    public void setUserAnswer(String userAnswer) { this.userAnswer = userAnswer; }
+
     public int getLessonId() { return lessonId; }
     public void setLessonId(int lessonId) { this.lessonId = lessonId; }
-    public int getUserAnswer() { return userAnswer; }
-    public void setUserAnswer(int userAnswer) { this.userAnswer = userAnswer; }
 }

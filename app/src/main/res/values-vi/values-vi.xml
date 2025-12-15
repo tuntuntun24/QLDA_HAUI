@@ -28,14 +28,16 @@
     <string name="btn_them_hen">Thêm nhắc nhở</string>
 
     <string-array name="arr_de_cuong">
-        <item>Chương 1: Tổng quan quản lý dự án</item>
-        <item>Chương 2: Quản lý yêu cầu</item>
-        <item>Chương 3: Lập kế hoạch dự án</item>
-        <item>Chương 4: Phát triển sản phẩm</item>
-        <item>Chương 5: Lập lịch dự án</item>
-        <item>Chương 6: Thực hiện dự án</item>
-        <item>Chương 7: Kết thúc dự án</item>
-        <item>Chương 8: Báo cáo bài tập lớn</item>
+        <item>Chương 1: Tổng quan về dự án và quản lý dự án</item>
+        <item>Chương 2: Mô hình tổ chức và nhân sự dự án</item>
+        <item>Chương 3: Lập kế hoạch và phạm vi dự án</item>
+        <item>Chương 4: Quản lý thời gian và tiến độ dự án</item>
+        <item>Chương 5: Quản lý chi phí và nguồn lực dự án</item>
+        <item>Chương 6: Quản lý chất lượng dự án</item>
+        <item>Chương 7: Quản lý nhân sự và truyền thông dự án</item>
+        <item>Chương 8: Quản lý rủi ro dự án</item>
+        <item>Chương 9: Quản lý đấu thầu và hợp đồng</item>
+        <item>Chương 10: Đánh giá hiệu quả và kết thúc dự án</item>
     </string-array>
 
     <string-array name="arr_on_tap">
@@ -73,31 +75,36 @@
 
     <string name="txt_danh_sach_bai">Danh sách bài thi</string>
     <string name="txt_ket_qua_gan_nhat">Kết quả làm bài gần nhất</string>
-    <string name="label_kttx1">KTTX 1 (Bài 1-3):</string>
-    <string name="label_kttx2">KTTX 2 (Bài 4-6):</string>
-    <string name="label_kthp">KTHP (Tổng hợp):</string>
+    <string name="label_kttx1">KTTX 1 (Chương 1-3):</string>
+    <string name="label_kttx2">KTTX 2 (Chương 4-7):</string>
+    <string name="label_kthp">KTHP (Tất cả 10 chương):</string>
 
     <string name="title_chi_tiet">Chi tiết bài thi</string>
-
     <string name="title_lam_bai">Làm bài thi</string>
-
     <string name="title_chi_tiet_bai">Nội dung bài học</string>
 
     <string-array name="arr_bai_chuong_1">
-        <item>1.1. Khái niệm dự án và quản lý dự án</item>
-        <item>1.2. Các đặc trưng của dự án</item>
-        <item>1.3. Chu trình quản lý dự án</item>
+        <item>1.1. Khái niệm và bản chất của dự án</item>
+        <item>1.2. Các đặc trưng cơ bản của dự án</item>
+        <item>1.3. Phân biệt quản lý dự án và quản lý thường xuyên</item>
     </string-array>
 
     <string-array name="arr_bai_chuong_2">
-        <item>2.1. Quy trình quản lý yêu cầu</item>
-        <item>2.2. Kỹ thuật khơi gợi yêu cầu</item>
-        <item>2.3. Phân tích và đàm phán yêu cầu</item>
+        <item>2.1. Các mô hình tổ chức quản lý dự án</item>
+        <item>2.2. Lựa chọn mô hình tổ chức phù hợp</item>
     </string-array>
 
     <string-array name="arr_bai_mac_dinh">
-        <item>Bài 1: Nội dung đang cập nhật...</item>
-        <item>Bài 2: Nội dung đang cập nhật...</item>
+        <item>Bài 1: Tổng quan</item>
+        <item>Bài 2: Tổ chức</item>
+        <item>Bài 3: Kế hoạch</item>
+        <item>Bài 4: Thời gian</item>
+        <item>Bài 5: Chi phí</item>
+        <item>Bài 6: Chất lượng</item>
+        <item>Bài 7: Nhân sự</item>
+        <item>Bài 8: Rủi ro</item>
+        <item>Bài 9: Đấu thầu</item>
+        <item>Bài 10: Kết thúc</item>
     </string-array>
 
     <string name="txt_de_cuong_bai">Đề cương bài</string>
@@ -105,11 +112,8 @@
 
     <string name="label_lan_thi">Lần</string>
     <string name="label_bieu_do_chart">Điểm số qua các lần thi</string>
-
     <string name="txt_chua_thi">Chưa thi</string>
-
     <string name="btn_chon_gio">Chọn giờ</string>
-
     <string name="label_tong_ket">Điểm tổng kết (10):</string>
     <string name="label_diem_chu">Điểm chữ:</string>
     <string name="txt_chua_du_diem">Chưa đủ điểm</string>
