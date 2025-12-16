@@ -22,6 +22,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import java.util.Calendar;
+import android.os.Build;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -80,6 +85,42 @@ public class NhacHenActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+    // Thêm hàm này vào NhacHenActivity.java
+    private void setAlarm(int hour, int minute, String content) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.putExtra("noi_dung", content);
+
+        // Tạo requestCode duy nhất để không bị ghi đè
+        int requestCode = (int) System.currentTimeMillis();
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,
+                requestCode,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        // MẸO TEST NHANH: Nếu bạn muốn thử ngay, hãy bỏ comment dòng dưới đây
+        // long triggerTime = System.currentTimeMillis() + 10000; // Sẽ reo sau 10 giây
+        long triggerTime = calendar.getTimeInMillis();
+
+        // Nếu thời gian hẹn đã qua trong ngày, hẹn cho ngày mai
+        if (triggerTime <= System.currentTimeMillis()) {
+            triggerTime += 24 * 60 * 60 * 1000;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
+        } else {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
+        }
     }
 
     // --- HÀM HIỂN THỊ DIALOG CÓ CHỌN GIỜ ---
@@ -180,7 +221,12 @@ public class NhacHenActivity extends AppCompatActivity {
                         arrHenGio.set(viTriCanSua, ketQua);
                         Toast.makeText(NhacHenActivity.this, getString(R.string.msg_da_cap_nhat), Toast.LENGTH_SHORT).show();
                     }
-
+                    // --- THÊM DÒNG NÀY VÀO ĐÂY ---
+                    // Lấy giờ và phút từ đối tượng calendar đã được cập nhật lúc chọn giờ
+                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                    int minute = calendar.get(Calendar.MINUTE);
+                    setAlarm(hour, minute, noiDung);
+                    // ----------------------------
                     // Sắp xếp danh sách theo giờ tăng dần
                     Collections.sort(arrHenGio);
 

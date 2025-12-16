@@ -1,11 +1,15 @@
 package com.example.learningapp;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,6 +29,13 @@ public class MainActivity extends AppCompatActivity {
         // Ẩn thanh tiêu đề mặc định (Action Bar) cho đẹp
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
         }
 
         // --- 1. ÁNH XẠ (TÌM ID TỪ FILE XML) ---
