@@ -14,6 +14,7 @@
     <string name="btn_ngon_ngu">Change Language</string>
 
     <string name="tieu_de_doi_ngon_ngu">Select Language</string>
+    <string name="tieu_de_doi_nen_sang_toi">Select mode</string>
     <string name="rad_tieng_viet">Vietnamese</string>
     <string name="rad_tieng_anh">English</string>
     <string name="btn_luu_ngon_ngu">Save &amp; Apply</string>

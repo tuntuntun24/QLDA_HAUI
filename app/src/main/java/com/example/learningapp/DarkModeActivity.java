@@ -21,14 +21,19 @@ public class DarkModeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dark_mode);
 
-        // --- PHẦN MỚI THÊM: Cấu hình Toolbar ---
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        // Hiện nút Back và đặt Tiêu đề
+//        // --- PHẦN MỚI THÊM: Cấu hình Toolbar ---
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//
+//        // Hiện nút Back và đặt Tiêu đề
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Hiện mũi tên
+//            getSupportActionBar().setTitle("Cài đặt giao diện"); // Đặt tên ở đây
+//        }
+        // --- CẤU HÌNH ACTION BAR ---
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Hiện mũi tên
-            getSupportActionBar().setTitle("Cài đặt giao diện"); // Đặt tên ở đây
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Hiện nút Back
+            getSupportActionBar().setTitle(R.string.tieu_de_doi_nen_sang_toi); // Set tiêu đề từ string
         }
         // ---------------------------------------
 
