@@ -38,7 +38,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         // Xây dựng thông báo
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(android.R.drawable.ic_lock_idle_alarm) // Sử dụng icon báo thức của hệ thống
-                .setContentTitle("Thông báo từ Learning App")
+                .setContentTitle("Thông báo từ Tiện ích học tập")
                 .setContentText(noiDung)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
