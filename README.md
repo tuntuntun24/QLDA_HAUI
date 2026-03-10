@@ -35,16 +35,8 @@
 
 ## 🚀 Hướng dẫn cài đặt
 
-1. **Mở dự án:** Dùng Android Studio mở thư mục chứa mã nguồn.
+1. **Mở dự án:** Tải dự án rồi dùng Android Studio mở thư mục chứa mã nguồn.
 2. **Đồng bộ:** Chờ Gradle sync xong các thư viện.
 3. **Cấp quyền:** Đảm bảo cấp quyền thông báo khi ứng dụng yêu cầu (để dùng tính năng Nhắc hẹn).
 4. **Chạy app:** Nhấn **Run** (biểu tượng tam giác xanh) để cài lên máy ảo hoặc điện thoại.
 
----
-
-## 📂 Cấu trúc Database
-Dữ liệu lưu tại: `app/src/main/res/raw/data_real.db`
-- **Bảng Cau:** Lưu mã câu, nội dung, đáp án và liên kết bài học.
-
----
-*Phát triển cho học phần Quản lý dự án - HaUI*
